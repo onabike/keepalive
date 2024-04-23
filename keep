@@ -1,0 +1,27 @@
+#!/bin/bash
+
+FILE="$HOME/scripts/excuses"
+if [ ! -e "$FILE" ]; then
+    echo ""
+    echo "$FILE does not exist"
+    echo "##############################################"
+    command -v curl >/dev/null 2>&1 || { echo >&2 "Holy cow! You don't even have curl, get lost!"; echo ""; exit 1; }
+    mkdir -p $HOME/scripts/
+    curl -o $FILE https://pages.cs.wisc.edu/~ballard/bofh/excuses
+    echo "##############################################"
+fi
+
+keep () {
+ clear;
+ echo "If you are reading this..." &&  echo  "Congratulations, you are alive."
+ echo ""
+ echo "You are stuck on the following planet:" `hostname`
+ echo "It has been" `date +%s | numfmt --g` "seconds since January 1st 1970, this is quite a while..."
+ echo ""; echo "Your current excuse is:"; shuf -n 1 $HOME/scripts/excuses
+}
+
+while :
+do
+ keep
+ sleep 30
+done
